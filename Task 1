@@ -1,0 +1,149 @@
+data_cleaning_customer_personality_analysis.ipynb
+🎯 Objective
+To clean and prepare a raw dataset by handling missing values, duplicates, inconsistent formatting, and data type issues to ensure it is ready for analysis.
+
+🛠️ Tools Used
+Python (Pandas) for data manipulation
+
+Jupyter Notebook / Google Colab
+
+(Optional: Excel for manual inspection or small datasets)
+
+📁 Dataset Used
+Customer Personality Analysis (from Kaggle)
+
+🔧 Steps Performed
+Handling Missing Values
+
+Used .isnull().sum() to identify missing data.
+
+Removed or imputed null values using:
+
+df.dropna() for rows with too many missing fields.
+
+df.fillna() for columns where imputation made sense (e.g., using mean, median, or mode).
+
+Removing Duplicates
+
+Identified duplicates using df.duplicated().
+
+Removed them using df.drop_duplicates().
+
+Standardizing Text Values
+
+Converted text columns (like Gender, Country) to consistent formats:
+
+Used .str.lower().str.strip() to remove extra spaces and unify casing.
+
+Replaced inconsistent labels using .replace() (e.g., "M" and "Male" standardized to "male").
+
+Date Format Consistency
+
+Converted date columns (like Dt_Customer) to datetime using pd.to_datetime().
+
+Standardized format to dd-mm-yyyy.
+
+Renaming Columns
+
+Renamed columns to be lowercase, snake_case, and removed spaces:
+
+Example: "Income" → "income", "Education Level" → "education_level"
+
+Done using df.columns = df.columns.str.lower().str.replace(' ', '_')
+
+Fixing Data Types
+
+Ensured columns had the correct data types:
+
+Age as int
+
+Income as float
+
+Date fields as datetime
+
+✅ Deliverables
+Cleaned Dataset: cleaned_customer_personality.csv
+
+Notebook: data_cleaning_customer_personality.ipynb
+
+Summary of Changes:
+
+Dropped 152 null values in Income
+
+Standardized 3 gender categories into 2
+
+Removed 4 duplicate rows
+
+Converted Dt_Customer to datetime format
+
+Renamed all column headers for consistency
+
+Ensured correct data types for analysis
+
+📌 Notes
+This task lays the foundation for further analysis by ensuring data quality.
+
+The same approach can be applied to other datasets like:
+
+Medical Appointment No Shows
+
+Mall Customer Segmentation Data
+
+Netflix Movies and TV Shows
+
+Sales Data
+
+
+
+By using Python
+
+# Step 1: Import Libraries
+import pandas as pd
+import numpy as np
+
+# Step 2: Load Dataset
+df = pd.read_csv("marketing_campaign.csv", sep="\t")  # Adjust filename and separator as needed
+print("Initial shape:", df.shape)
+
+# Step 3: Overview
+print(df.info())
+print(df.head())
+
+# Step 4: Handle Missing Values
+print("Missing values per column:\n", df.isnull().sum())
+df = df.dropna()  # Or use df.fillna() for imputation
+print("Shape after dropping nulls:", df.shape)
+
+# Step 5: Remove Duplicates
+df = df.drop_duplicates()
+print("Shape after removing duplicates:", df.shape)
+
+# Step 6: Standardize Text Columns
+df['Education'] = df['Education'].str.lower().str.strip()
+df['Marital_Status'] = df['Marital_Status'].str.lower().str.strip()
+df['Country'] = df['Country'].str.title().str.strip()
+
+# Step 7: Convert Dates
+df['Dt_Customer'] = pd.to_datetime(df['Dt_Customer'], format='%d-%m-%Y', errors='coerce')
+
+# Step 8: Rename Columns
+df.columns = df.columns.str.lower().str.replace(' ', '_')
+
+# Step 9: Fix Data Types
+df['income'] = df['income'].astype(float)
+df['year_birth'] = df['year_birth'].astype(int)
+
+# Step 10: Export Cleaned Data
+df.to_csv("cleaned_customer_personality.csv", index=False)
+print("Cleaned data exported successfully.")
+
+Data Cleaning
+
+## 🧹 Data Cleaning Summary
+
+- Dropped rows with missing values in `income` and other fields
+- Removed duplicate rows
+- Standardized text fields: `education`, `marital_status`, `country`
+- Converted `Dt_Customer` to datetime format
+- Renamed all columns to lowercase and snake_case
+- Corrected data types for `income`, `year_birth`, and dates
