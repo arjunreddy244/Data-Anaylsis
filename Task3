@@ -1,0 +1,118 @@
+Repository Structure
+📁 sales-trend-sql-analysis/
+pgsql
+Copy
+Edit
+├── README.md
+├── sql/
+│   └── monthly_sales_analysis.sql
+├── results/
+│   └── monthly_sales_results.csv
+├── images/
+│   └── monthly_sales_chart.png (optional)
+├── dataset_info.md
+└── interview_questions.md
+📝 README.md
+A well-structured README file explaining the project:
+
+markdown
+Copy
+Edit
+# 📊 Sales Trend Analysis Using SQL Aggregations
+
+## 🧠 Objective
+Analyze monthly revenue and order volume using SQL aggregations from the `online_sales` dataset.
+
+## 🛠 Tools Used
+- SQL (PostgreSQL / MySQL / SQLite)
+
+## 📂 Dataset Info
+- **Table:** `orders`
+- **Columns Used:** `order_date`, `amount`, `product_id`, `order_id`
+
+## 📌 SQL Tasks
+- Extract month and year from `order_date`
+- Calculate:
+  - Total monthly revenue (`SUM(amount)`)
+  - Monthly order volume (`COUNT(DISTINCT order_id)`)
+- Group data by month/year
+- Sort results chronologically
+- Limit results to specific periods
+- Identify top 3 months by revenue
+
+## 📄 Deliverables
+- SQL Script: [`monthly_sales_analysis.sql`](./sql/monthly_sales_analysis.sql)
+- Output Table: [`monthly_sales_results.csv`](./results/monthly_sales_results.csv)
+
+## 📈 Outcome
+Learn to group data and analyze sales trends over time using SQL.
+
+## 🧪 Sample Output
+| year | month | total_revenue | order_volume |
+|------|-------|----------------|---------------|
+| 2023 | 01    | 15000.50       | 220           |
+| 2023 | 02    | 17200.00       | 265           |
+...
+
+## 🗨️ Interview Preparation
+Key questions and answers: [interview_questions.md](./interview_questions.md)
+🔧 sql/monthly_sales_analysis.sql
+sql
+Copy
+Edit
+-- Monthly Revenue and Order Volume Analysis
+
+SELECT
+    EXTRACT(YEAR FROM order_date) AS year,
+    EXTRACT(MONTH FROM order_date) AS month,
+    SUM(amount) AS total_revenue,
+    COUNT(DISTINCT order_id) AS order_volume
+FROM
+    online_sales
+GROUP BY
+    EXTRACT(YEAR FROM order_date),
+    EXTRACT(MONTH FROM order_date)
+ORDER BY
+    year, month;
+
+-- Top 3 Months by Revenue
+SELECT
+    TO_CHAR(order_date, 'YYYY-MM') AS year_month,
+    SUM(amount) AS total_revenue
+FROM
+    online_sales
+GROUP BY
+    year_month
+ORDER BY
+    total_revenue DESC
+LIMIT 3;
+📄 interview_questions.md
+markdown
+Copy
+Edit
+# Interview Questions & Answers – SQL Aggregation
+
+1. **How do you group data by month and year?**  
+   Use `EXTRACT(MONTH FROM order_date)` and `EXTRACT(YEAR FROM order_date)` to group dates.
+
+2. **What's the difference between `COUNT(*)` and `COUNT(DISTINCT col)`?**  
+   - `COUNT(*)`: Counts all rows.  
+   - `COUNT(DISTINCT col)`: Counts only unique, non-null values in `col`.
+
+3. **How do you calculate monthly revenue?**  
+   Use `SUM(amount)` grouped by `EXTRACT(YEAR FROM order_date), EXTRACT(MONTH FROM order_date)`.
+
+4. **What are aggregate functions in SQL?**  
+   Functions that summarize data: `SUM()`, `COUNT()`, `AVG()`, `MAX()`, `MIN()`.
+
+5. **How to handle NULLs in aggregates?**  
+   - `COUNT(col)` ignores NULLs.  
+   - `SUM(amount)` treats NULLs as 0 unless all values are NULL.
+
+6. **What's the role of `ORDER BY` and `GROUP BY`?**  
+   - `GROUP BY` organizes rows into groups for aggregation.  
+   - `ORDER BY` sorts final output.
+
+7. **How do you get the top 3 months by sales?**  
+   Use `ORDER BY SUM(amount) DESC LIMIT 3`.
+
